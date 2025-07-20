@@ -43,7 +43,7 @@ public class ContaCor {
 		this.valorLanc = new float[ContaCor.QTDMAXLANC];		// ... com QTDMAXLANC elementos
 
 		// Como não houve definição clara do momento em que a cobrança da tarifa mensal deve ser efetuada se existir, implementamos na criacao
-		this.cobrarTarifa("Pacote de servicos mensais", this.pacote.getTarifaMensal(), false);
+		this.cobrarTarifa("Pacote de serviços mensais", this.pacote.getTarifaMensal(), false);
 	}
 
 	private boolean estaAtiva() {
@@ -156,7 +156,8 @@ public class ContaCor {
 		float tarifa = this.pacote.getTarifaSaque();
 		float saldoNecessario = val + tarifa;
 		if(saldoNecessario > this.saldoAtual) {
-			System.out.println("Saldo necessario: " + saldoNecessario);
+			System.out.println("Saldo abaixo do necessário: " + saldoNecessario);
+			return false;
 		}
 
 		this.efetuarTransacao(hist, -val);			// debita valor do saldo atual
@@ -189,7 +190,7 @@ public class ContaCor {
 		float tarifa = this.pacote.getTarifaEnviarTransferencia();
 		float saldoNecessario = val + tarifa;
 		if(saldoNecessario > this.saldoAtual) {
-			System.out.println("Saldo necessario: " + saldoNecessario);
+			System.out.println("Saldo abaixo do necessário: " + saldoNecessario);
 			return false;
 		}
 
