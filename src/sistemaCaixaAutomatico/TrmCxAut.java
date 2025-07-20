@@ -72,12 +72,12 @@ public class TrmCxAut {
 		do {
 			if (modoAtual==Caixa.MODO_CLIENTE) {  // modo cliente 
 				op=getInt
-						("opcao: 1 = consulta saldo, 2 = saque, 8 = modo supervisor, 9 = sai");
-				if (op!=1 && op!=2 && op!=8 && op!=9) op=0;
+						("opcao: 1 = consulta saldo, 2 = saque, 3 = transferencia, 8 = modo supervisor, 9 = sai");
+				if (op!=1 && op!=2  && op!=3 && op!=8 && op!=9) op=0;
 			}else {				// modo supervisor 
 				op=getInt
-						("opcao: 3 = recarrega, 8 = modo cliente, 9 = sai");
-				if (op!=3 && op!=8 && op!=9) op=0;
+						("opcao: 4 = recarrega, 8 = modo cliente, 9 = sai");
+				if (op!=4 && op!=8 && op!=9) op=0;
 			}
 		} while (op==0);
 		return(op);
@@ -106,6 +106,14 @@ public class TrmCxAut {
 				break;
 
 			case 3:
+				boolean transferenciaEfetuada = controladorCaixa.efetuarTransferencia(getInt("número da sua conta"), getInt("senha"), getInt("número da conta destino"), getInt("valor"));
+				if (transferenciaEfetuada)		// testa se a transferencia foi aceita
+					System.out.println("Transferencia efetuada com sucesso");
+				else
+					System.out.println("Pedido de transferencia recusada");
+				break;
+
+			case 4:
 				controladorCaixa.recarregar(getInt("senha")); 
 				break;
 

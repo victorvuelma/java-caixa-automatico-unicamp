@@ -33,7 +33,7 @@ public class ControladorCaixa {
 		if (cta==null)   // se numero de conta invalido ...
 			return -1; // ... retorna -1 
 		else             // caso contrario ... 
-			return cta.obterSaldo(senha); // efetua consulta 
+			return cta.obterSaldo(senha); // efetua consulta
 	} 
 
 	/**
@@ -60,17 +60,32 @@ public class ControladorCaixa {
 		if (cta==null)  // se número de conta inválido ...
 			return false;  // ... retorna false
 
-		if (cta.debitarValor("Saque Automatico", val, senha)==false) // se saque recusado ...
+		if (!cta.sacarValor("Saque Automatico", val, senha)) // se saque recusado ...
 			return false;  // retorna false
 		else{
 			this.caixa.liberarNotas((int)(val/10)); // libera pagamento
 			return true;
 		}
-
-
 	}
 
+	public boolean efetuarTransferencia (int num, int senha, int destino, float val){
+		ContaCor ctaOrigem=dbContas.buscarConta(num);  // obtem a referencia para o objeto que representa a conta 'origem'
+		if(ctaOrigem==null)
+			return false;
 
+		ContaCor ctaDestino=dbContas.buscarConta(destino);  // obtem a referencia para o objeto que representa a conta 'destino'
+		if(ctaDestino==null)
+			return false;
+
+		if(!ctaDestino.podeReceber(ctaOrigem)) {
+			return false;
+		}
+
+		if (!ctaOrigem.enviarTransferencia("Transferência para " + destino, val, senha)) // se saque recusado ...
+			return false;  // retorna false
+
+		return ctaDestino.receberTransferencia("Trasnferência de " + num, val);
+	}
 
 	public void recarregar(int senha){
 		this.caixa.recarregar(senha);
@@ -79,8 +94,6 @@ public class ControladorCaixa {
 	public boolean validarSenha(int senha){
 		return this.caixa.validarSenha(senha);
 	}
-
-
 
 	public void alternarModo(int senhaCaixa){
 		this.caixa.alternarModo(senhaCaixa);
